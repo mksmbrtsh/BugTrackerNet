@@ -1,0 +1,56 @@
+2016-08-08 16:01:35  threadproc_votes
+2016-08-08 16:01:35  sql=
+
+if exists (select * from dbo.sysobjects where id = object_id(N'[votes_view]'))
+drop view [votes_view]
+2016-08-08 16:01:35  started creating Lucene index using folder C:\btnet364\www\App_Data\lucene_index
+2016-08-08 16:01:36  sql=
+
+/* get searchable cols */					
+select sc.name
+from syscolumns sc
+inner join systypes st on st.xusertype = sc.xusertype
+inner join sysobjects so on sc.id = so.id
+where so.name = 'bugs'
+and st.[name] <> 'sysname'
+and sc.name not in ('rowguid',
+'bg_id',
+'bg_short_desc',
+'bg_reported_user',
+'bg_reported_date',
+'bg_project',
+'bg_org',
+'bg_category',
+'bg_priority',
+'bg_status',
+'bg_assigned_to_user',
+'bg_last_updated_user',
+'bg_last_updated_date',
+'bg_user_defined_attribute',
+'bg_project_custom_dropdown_value1',
+'bg_project_custom_dropdown_value2',
+'bg_project_custom_dropdown_value3',
+'bg_tags')
+and st.[name] in ('nvarchar','varchar')
+and sc.length > 30
+2016-08-08 16:01:51  exception building Lucene index: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: SQL Network Interfaces, error: 26 - Error Locating Server/Instance Specified)
+2016-08-08 16:01:51  exception in threadproc_votes:A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: SQL Network Interfaces, error: 26 - Error Locating Server/Instance Specified)
+2016-08-08 16:01:51     at System.Data.ProviderBase.DbConnectionPool.GetConnection(DbConnection owningObject)
+   at System.Data.ProviderBase.DbConnectionFactory.GetConnection(DbConnection owningConnection)
+   at System.Data.ProviderBase.DbConnectionPool.GetConnection(DbConnection owningObject)
+   at System.Data.ProviderBase.DbConnectionFactory.GetConnection(DbConnection owningConnection)
+   at System.Data.ProviderBase.DbConnectionClosed.OpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory)
+   at System.Data.SqlClient.SqlConnection.Open()
+   at btnet.DbUtil.get_sqlconnection() in c:\btnet364\www\App_Code\dbutil.cs:line 191
+   at ASP.default_aspx.Page_Load(Object sender, EventArgs e) in c:\btnet364\www\default.aspx:line 32
+   at System.Data.ProviderBase.DbConnectionClosed.OpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory)
+   at System.Data.SqlClient.SqlConnection.Open()
+   at btnet.DbUtil.get_sqlconnection() in c:\btnet364\www\App_Code\dbutil.cs:line 191
+   at btnet.DbUtil.get_dataset(String sql) in c:\btnet364\www\App_Code\dbutil.cs:line 138
+   at btnet.MyLucene.get_text_custom_cols() in c:\btnet364\www\App_Code\my_lucene.cs:line 78
+   at btnet.MyLucene.threadproc_build(Object obj) in c:\btnet364\www\App_Code\my_lucene.cs:line 145
+   at System.Data.ProviderBase.DbConnectionClosed.OpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory)
+   at System.Data.SqlClient.SqlConnection.Open()
+   at btnet.DbUtil.get_sqlconnection() in c:\btnet364\www\App_Code\dbutil.cs:line 191
+   at btnet.DbUtil.execute_nonquery(String sql) in c:\btnet364\www\App_Code\dbutil.cs:line 54
+   at btnet.Tags.threadproc_votes(Object obj) in c:\btnet364\www\App_Code\tags.cs:line 44
